@@ -125,3 +125,16 @@ plt.title("Gradient Boosting Learning Curve (Telco Churn)")
 plt.legend()
 plt.tight_layout()
 plt.savefig("outputs/gbm_learning_curve.png", dpi=150)
+
+# ---------------------------------------------------------------
+# 6. RF vs GBM comparison bar chart
+# ---------------------------------------------------------------
+metrics_df = pd.DataFrame(results).T
+metrics_df.plot(kind="bar", figsize=(8, 5))
+plt.title("Random Forest vs Gradient Boosting — Telco Churn")
+plt.ylabel("Score")
+plt.xticks(rotation=15)
+plt.tight_layout()
+plt.savefig("outputs/rf_vs_gbm_comparison.png", dpi=150)
+ 
+print("\nDone. Plots saved to outputs/.")
