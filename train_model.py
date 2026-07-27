@@ -110,3 +110,18 @@ print("\nScratch vs sklearn implementation match check:")
 scratch_proba = gbm_scratch.predict_proba(X_test_s)
 sklearn_proba = gbm_sklearn.predict_proba(X_test_s)[:, 1]
 print(f"Max |proba diff|: {np.max(np.abs(scratch_proba - sklearn_proba)):.4f}")
+
+# ---------------------------------------------------------------
+# 5. Learning curves (train vs val log-loss over boosting rounds)
+# ---------------------------------------------------------------
+plt.figure(figsize=(8, 5))
+plt.plot(gbm_scratch.train_loss_history, label="train log-loss")
+plt.plot(gbm_scratch.val_loss_history, label="val log-loss")
+plt.axvline(gbm_scratch.best_iteration, color="red", linestyle="--",
+            label=f"best iter ({gbm_scratch.best_iteration})")
+plt.xlabel("Boosting round")
+plt.ylabel("Log-loss")
+plt.title("Gradient Boosting Learning Curve (Telco Churn)")
+plt.legend()
+plt.tight_layout()
+plt.savefig("outputs/gbm_learning_curve.png", dpi=150)
