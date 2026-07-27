@@ -71,3 +71,42 @@ gbm_sklearn = GradientBoostingClassifier(
     random_state=RANDOM_STATE,
 )
 gbm_sklearn.fit(X_train_s, y_train)
+
+# ---------------------------------------------------------------
+# 4. Compare against Random Forest
+# ---------------------------------------------------------------
+rf = RandomForestClassifier(
+    n_estimators=200, max_depth=None, min_samples_split=10,
+    random_state=RANDOM_STATE, oob_score=True
+)
+rf.fit(X_train_s, y_train)
+ 
+ 
+def evaluate(name, y_true, y_pred, y_proba):
+    print(f"\n--- {name} ---")
+    print(f"Accuracy : {accuracy_score(y_true, y_pred):.4f}")
+    print(f"F1       : {f1_score(y_true, y_pred):.4f}")
+    print(f"ROC-AUC  : {roc_auc_score(y_true, y_proba):.4f}")
+ 
+ 
+results = {}
+for name, model, is_scratch in [
+    ("GBM (scratch)", gbm_scratch, True),
+    ("GBM (sklearn)", gbm_sklearn, False),
+    ("Random Forest (Day 8)", rf, False),
+]:
+    if is_scratch:
+        proba = model.predict_proba(X_test_s)
+        pred = model.predict(X_test_s)
+    else:
+        proba = model.predict_proba(X_test_s)[:, 1]
+        pred = model.predict(X_test_s)
+    evaluate(name, y_test, pred, proba)
+    results[name] = {"accuracy": accuracy_score(y_test, pred),
+                      "f1": f1_score(y_test, pred),
+                      "roc_auc": roc_auc_score(y_test, proba)}
+ 
+print("\nScratch vs sklearn implementation match check:")
+scratch_proba = gbm_scratch.predict_proba(X_test_s)
+sklearn_proba = gbm_sklearn.predict_proba(X_test_s)[:, 1]
+print(f"Max |proba diff|: {np.max(np.abs(scratch_proba - sklearn_proba)):.4f}")
