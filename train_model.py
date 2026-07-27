@@ -58,4 +58,16 @@ config = GBMConfig(
  
 gbm_scratch = GradientBoostingScratch(config)
 gbm_scratch.fit(X_train_s, y_train, X_val=X_val_s, y_val=y_val)
- 
+
+# ---------------------------------------------------------------
+# 3. Validate against sklearn GradientBoostingClassifier
+# ---------------------------------------------------------------
+gbm_sklearn = GradientBoostingClassifier(
+    n_estimators=len(gbm_scratch.trees),
+    learning_rate=0.1,
+    max_depth=3,
+    min_samples_split=20,
+    subsample=0.8,
+    random_state=RANDOM_STATE,
+)
+gbm_sklearn.fit(X_train_s, y_train)
