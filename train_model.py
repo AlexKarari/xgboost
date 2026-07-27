@@ -42,3 +42,20 @@ scaler = StandardScaler()
 X_train_s = scaler.fit_transform(X_train)
 X_val_s = scaler.transform(X_val)
 X_test_s = scaler.transform(X_test)
+
+# ---------------------------------------------------------------
+# 2. Train scratch GBM with early stopping on validation set
+# ---------------------------------------------------------------
+config = GBMConfig(
+    n_estimators=200,
+    learning_rate=0.1,
+    max_depth=3,
+    min_samples_split=20,
+    early_stopping_rounds=15,
+    subsample=0.8,
+    random_state=RANDOM_STATE,
+)
+ 
+gbm_scratch = GradientBoostingScratch(config)
+gbm_scratch.fit(X_train_s, y_train, X_val=X_val_s, y_val=y_val)
+ 
