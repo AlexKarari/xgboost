@@ -18,7 +18,7 @@ RANDOM_STATE = 42
 # ---------------------------------------------------------------
 # 1. Load + preprocess (reuse pipeline on the Telco dataset)
 # ---------------------------------------------------------------
-df = pd.read_csv("data/telco_churn.csv")
+df = pd.read_csv("data/Telco-Customer-Churn.csv")
  
 df["TotalCharges"] = pd.to_numeric(df["TotalCharges"], errors="coerce")
 df = df.dropna(subset=["TotalCharges"])
@@ -93,7 +93,7 @@ results = {}
 for name, model, is_scratch in [
     ("GBM (scratch)", gbm_scratch, True),
     ("GBM (sklearn)", gbm_sklearn, False),
-    ("Random Forest (Day 8)", rf, False),
+    ("Random Forest", rf, False),
 ]:
     if is_scratch:
         proba = model.predict_proba(X_test_s)
